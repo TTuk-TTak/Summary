@@ -43,7 +43,8 @@
  'Git Bash'프로그램에서 명령어 입력
  
 # Git 구성 
-{git의 이해.png}  
+![다운로드](https://user-images.githubusercontent.com/67628725/197425206-c2b76d8d-d045-4f63-979d-8eaa159e4557.png)  
+
  *작업디렉토리(Working Directory)	: git에서 관리 o 추적 x  
  *스테이징영역(Staging Area)		: git에서 변경점 추적 o, commit준비영역, 작업한 내용물의 임시저장영역  
  *로컬저장소(Local Repository)	: commit이 영구적으로 저장되는 영역   
