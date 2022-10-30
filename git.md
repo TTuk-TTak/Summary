@@ -136,15 +136,26 @@ git정보등록)
        - 변경점이 스테이징 되어있지 않더라도, 이전에 한번 staging영역에 올라온 파일은 git에 의해 관리되기 때문에 확인 가능  
          
   commit 되돌리기1 - 복구 X)  
-   $ git commit --amend  
+   $ git commit --amend   
     	- 마지막 반영한 최신 '커밋메시지'를 변경하고 싶을 때 -> 최신 커밋 수정가능한 에디터 실행됨  
         - 되돌린 커밋은 절대 복구할 수 없음 !!! ***  
   commit 되돌리기2 - 복구 O, roll-back)   
-   $ git revert {마지막에 반영한 commit ID}  
+   $ git revert {마지막에 반영한 commit ID}   
    	- 변경 취소 & 반영한 커밋 되돌리기 가능  
    	- 커밋히스토리를 유지하며, 내용만 롤백    
 	- 즉, commit을 취소한 내용의 commit이 하나 추가로 더 생김   
 	- 되돌린 커밋은 새로운 파일로 저장되어 코드 원복이 가능함   
+	
+git 원격 저장소에 반영)	
+   $ git push {원격저장소 별칭} {현재로컬브랜치}  
+   	: 원격 저장소에 commit 반영(push)  
+		- {저장소 별칭} : $ git remote -v 실행 시, 제일 처음에 뜨는 이름 
+			origin  https://gitlab.com/ys26/TEST.git (fetch) 에서 origin. ???? origin 이 뭐 가리키더라 ??(위에서 설정한 원격저장소 주소의 별칭임)
+		- {현재 브랜치} : 로컬 디렉토리에서 현재 있는 브랜치 (git bash 에 괄호치고 써 있음)
+		- 이후 창 뜨면 아이디/비번 누르고 들어가기 
+
+
+  
  
  
 
