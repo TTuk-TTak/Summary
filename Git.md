@@ -172,3 +172,12 @@ git 원격 저장소에 반영)
 $ git push {원격저장소 별칭} {현재로컬브랜치}: 원격 저장소에 commit 반영(push)- {저장소 별칭} : 
 
 $ git remote -v 실행 시, 제일 처음에 뜨는 이름 origin [https://gitlab.com/ys26/TEST.git](https://gitlab.com/ys26/TEST.git) (fetch) 에서 origin. ???? origin 이 뭐 가리키더라 ??(위에서 설정한 원격저장소 주소의 별칭임) - {현재 브랜치} : 로컬 디렉토리에서 현재 있는 브랜치 (git bash 에 괄호치고 써 있음) - 이후 창 뜨면 아이디/비번 누르고 들어가기
+
+
+   
+### Cherry-Pick)  
+  
+  : 다른 브랜치에 있는 commit을 일부만 선택해 내 브랜치에 적용할 때 사용  
+$ git checkout {타겟브랜치}  
+$ git cherry-pick {commit번호}  
+
