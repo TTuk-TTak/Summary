@@ -180,4 +180,8 @@ $ git remote -v 실행 시, 제일 처음에 뜨는 이름 origin [https://gitl
   : 다른 브랜치에 있는 commit을 일부만 선택해 내 브랜치에 적용할 때 사용  
 $ git checkout {타겟브랜치}  
 $ git cherry-pick {commit번호}  
-
+  
+  
+### Tag
+lightweight vs annotated  
+$ git tag {tag명}
