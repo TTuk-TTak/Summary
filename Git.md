@@ -116,9 +116,17 @@ $ git init : ***'.git'*** 폴더 생성 + master기본브랜치 생성
 
 ### 원격저장소와 연결)
 
-$ git remote add {저장소 별칭} {저장소 주소} : 원격-로컬 연결 (저장소 별칭 ex_default, origin)
+$ git remote add {원격저장소 별칭} {원격저장소 주소} : 원격-로컬 연결 (저장소 별칭 ex_default, origin)
 
-$ git remote -v : 로컬에 연결된 원격저장소 주소 확인 => fetch랑 push 브랜치 두개 생기던데 뭐임????
+$ git remote -v : 로컬에 연결된 원격저장소 주소 확인 => fetch랑 push 브랜치 두개 생기던데 뭐임????  
+
+or  
+
+$ git clone {원격저장소 주소}  : 원격저장소 로컬로 다운로드 (기본 master 브랜치)  
+ - 이미 존재하는 '.git' 폴더까지 다운로드 하는 것이므로, 별도의 초기화 필요치 않음
+ - 
+
+  
 
 # Git 명령어 정리
 
@@ -140,16 +148,22 @@ $ cd {디렉토리경로} : 해당 경로로 이동
 
 $ git status : 현재 폴더 내, 파일의 상태(브랜치, 커밋, 스테이징 등) 확인
 
-$ git log : 커밋의 히스토리 확인<히스토리 구성>- commit 커밋id => SHA1 해시알고리즘으로 커밋id만듦- Author: 작성자- Date: 커밋날짜
-
+$ git log : 커밋의 히스토리 확인  
+      - down 키보드 누르면 -> 로그 히스토리 쭈욱 확인 가능  
+      `<히스토리 구성>  
+      - commit: 커밋id => SHA1 해시알고리즘으로 커밋id만듦  
+      - Author: 작성자  
+      - Date: 커밋날짜  `
+  
       `<git log 옵션>  
-      --help				: 해당 명령어의 매뉴얼 페이지 생성  
-      -u 				: git diff + log => 커밋히스토리와 함께 각 커밋에서의 코드 변경내용을 보여줌  
-      -u {commit ID}				: 입력한 {commit ID}의 내용 + 코드변경내용  
-      				= $ git show {commit ID}와 같은 명령어
-      -{숫자n}				: 최신 n개만큼의 커밋내용 표출  
-      --name-only				: 커밋히스토리의 '변경된 파일명'까지 보게됨
-      --oneline				: 커밋을 간결하게 한줄로만 표시`
+      --help		: 해당 명령어의 매뉴얼 페이지 생성  
+      -u 			: git diff + log => 커밋히스토리와 함께 각 커밋에서의 코드 변경내용을 보여줌  
+      -u {commit ID}	: 입력한 {commit ID}의 내용 + 코드변경내용  
+      		= $ git show {commit ID}와 같은 명령어
+      -{숫자n}		: 최신 n개만큼의 커밋내용 표출  
+      --name-only		: 커밋히스토리의 '변경된 파일명'까지 보게됨
+      --oneline		: 커밋을 간결하게 한줄로만 표시  
+      --reverse  : 오래된 커밋순으로 표시`
 
 ### git동작)
 
@@ -163,15 +177,32 @@ $ git commit :스테이징(add)된 변경사항들을 commitgit commit할 시, e
 
 $ git commit -m "{커밋메시지}" : 커밋메시지와 함께 바로 commit
 
-$ git diff : '워킹 디렉토리'에서, 변경사항(코드) 확인.- 보기 힘들기 때문에 간단한 변경 or 변경점 적은 경우에만 사용- 변경점이 스테이징 되어있지 않더라도, 이전에 한번 staging영역에 올라온 파일은 git에 의해 관리되기 때문에 확인 가능
+$ git diff : '워킹 디렉토리'에서, 변경사항(코드) 확인.  
+  - 보기 힘들기 때문에 간단한 변경 or 변경점 적은 경우에만 사용
+  - 변경점이 스테이징 되어있지 않더라도, 이전에 한번 staging영역에 올라온 파일은 git에 의해 관리되기 때문에 확인 가능
 
-commit 되돌리기1 - 복구 X)$ git commit --amend- 마지막 반영한 최신 '커밋메시지'를 변경하고 싶을 때 -> 최신 커밋 수정가능한 에디터 실행됨- 되돌린 커밋은 절대 복구할 수 없음 !!! ***commit 되돌리기2 - 복구 O, roll-back)$ git revert {마지막에 반영한 commit ID}- 변경 취소 & 반영한 커밋 되돌리기 가능- 커밋히스토리를 유지하며, 내용만 롤백- 즉, commit을 취소한 내용의 commit이 하나 추가로 더 생김- 되돌린 커밋은 새로운 파일로 저장되어 코드 원복이 가능함
+#### commit 되돌리기1 - 복구 X)  
+$ git commit --amend  
+ - 마지막 반영한 최신 '커밋메시지'를 변경하고 싶을 때
+ - 최신 커밋에 추가할 변경점이 있을 때  
+ - -> 최신 커밋 수정가능한 에디터 실행됨
+ - 되돌린 커밋은 절대 복구할 수 없음 !!! ***  
 
-git 원격 저장소에 반영) 
+#### commit 되돌리기2 - 복구 O, roll-back)  
+$ git revert {마지막에 반영한 commit ID}  
+ - 변경 취소 & 반영한 커밋 되돌리기 가능  
+ - 커밋히스토리를 유지하며, 내용만 롤백  
+ - 즉, commit을 취소한 내용의 commit이 하나 추가로 더 생김  
+ - 되돌린 커밋은 새로운 파일로 저장되어 코드 원복이 가능함  
+
+### git 원격 저장소에 반영)  
 
 $ git push {원격저장소 별칭} {현재로컬브랜치}: 원격 저장소에 commit 반영(push)- {저장소 별칭} : 
 
-$ git remote -v 실행 시, 제일 처음에 뜨는 이름 origin [https://gitlab.com/ys26/TEST.git](https://gitlab.com/ys26/TEST.git) (fetch) 에서 origin. ???? origin 이 뭐 가리키더라 ??(위에서 설정한 원격저장소 주소의 별칭임) - {현재 브랜치} : 로컬 디렉토리에서 현재 있는 브랜치 (git bash 에 괄호치고 써 있음) - 이후 창 뜨면 아이디/비번 누르고 들어가기
+$ git remote -v 실행 시, 제일 처음에 뜨는 이름 origin [https://gitlab.com/ys26/TEST.git](https://gitlab.com/ys26/TEST.git) (fetch) 에서 origin. ???? origin 이 뭐 가리키더라 ??(위에서 설정한 원격저장소 주소의 별칭임)  
+ - {현재 브랜치} : 로컬 디렉토리에서 현재 있는 브랜치 (git bash 에 괄호치고 써 있음)
+ - 이후 창 뜨면 아이디/비번 누르고 들어가기
+ - (git 업데이트 이후, 토큰 발급한 후 사용해야함)
 
 
    
