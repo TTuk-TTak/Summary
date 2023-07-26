@@ -1,6 +1,3 @@
-# Git
-
-# Git
 
 # Git
 
@@ -163,17 +160,23 @@ $ git log : 커밋의 히스토리 확인
       -{숫자n}		: 최신 n개만큼의 커밋내용 표출  
       --name-only		: 커밋히스토리의 '변경된 파일명'까지 보게됨
       --oneline		: 커밋을 간결하게 한줄로만 표시  
-      --reverse  : 오래된 커밋순으로 표시`
+      --reverse  : 오래된 커밋순으로 표시  
+        
+      -- all  : 모든 branch의 커밋확인  
+      -- graph  : 브랜치를 그래프 그림으로 표현  `
 
 ### git동작)
 
  * 변경점 = 코드의 변경사항을 의미
 
-$ git add {파일명} : 스테이징 영역에 변경점 올림*경고발생warning: in the working copy of 'test.java', LF will be replaced by CRLF the next time Git touches it위같은 에러가 뜬다면, 다음 명령어로 에러를 무시할 수 있음
+$ git add {파일명} : 스테이징 영역에 변경점 올림  
+ *경고발생warning: in the working copy of 'test.java', LF will be replaced by CRLF the next time Git touches it  
+ - 위같은 에러가 뜬다면, 다음 명령어로 에러를 무시할 수 있음
+ - $ git config --global core.safecrlf false
 
-$ git config --global core.safecrlf false
-
-$ git commit :스테이징(add)된 변경사항들을 commitgit commit할 시, editor창이 뜨는데, 커밋메시지를 입력하는 곳이다.'i' 누른 후 입력 후 저장. (#주석처리 된 줄은 메시지로 안들어감)
+$ git commit :스테이징(add)된 변경사항들을 commit  
+ - git commit할 시, editor창이 뜨는데, 커밋메시지를 입력하는 곳이다.
+ - 'i' 누른 후 입력 후 저장. (#주석처리 된 줄은 메시지로 안들어감)  
 
 $ git commit -m "{커밋메시지}" : 커밋메시지와 함께 바로 commit
 
@@ -204,6 +207,67 @@ $ git remote -v 실행 시, 제일 처음에 뜨는 이름 origin [https://gitl
  - 이후 창 뜨면 아이디/비번 누르고 들어가기
  - (git 업데이트 이후, 토큰 발급한 후 사용해야함)
 
+
+$ git pull {원격저장소 별칭} {현재로컬브랜치} : 원격 -> 로컬로 다른 개발자가 반영한 commit 가져오기 (로컬에 머지)  
+ - 가져온 commit + merge commit 까지 중복 발생 ***
+ - ?? 머지 커밋 없애려면 어떻게 해야함 ??
+
+
+### git 브랜치)
+- 본래 소스코드로 부터 분기한 '독립적인' 작업 공간  
+- 최신 commit을 가리키는 일종의 `포인터`
+- 매우 가벼움
+- 
+
+$ git branch : 현재 작업중인 브랜치 확인  
+ - 기본 master 브랜치
+ - 초기 git init 후, commit이 없는 채로 git branch실행 시, 아무것도 뜨지 않음. (커밋이 없어 브랜치=포인터가 가리키는 게 없기 때문)
+ - commit 이 없다 = 브랜치(포인터)가 가리킬 것이 없다 = 브랜치가 없다 = 최초 commit이 있어야 브랜치가 가리킬 수 있다.
+ - 브랜치 포인터)
+   - HEAD : 현재 (로컬)브랜치를 가리키는 일종의 포인터 (마지막 commit에 대한 스냅샷)
+   - ex) `HEAD -> master(브랜치) -> commit1(최신커밋)`  형태로 가리키고있음
+   - 새로운 commit은 바로 이전 commit을 가리키는 형태로 linked 됨
+ - `<git branch 옵션>
+   -v  : 각 브랜치가 가리키는 최신 commit 보여줌
+     - <형태>  {브랜치명} {최신 commit ID} {최신 commit 메시지} on {해당 commit이 있는 브랜치(머지된 브랜치)}`
+
+$ git branch {생성할 브랜치명} : 새로운 브랜치 생성 (자동이동 X)  
+ - 브랜치 새로 생성 = 현재기준 브랜치의 최신 commit을 가리키는 포인터를 또 새로 하나 더 만듦
+ - ???? 처음 branch 생성하면 가리키는 commit이 없음? 기존 분기한 브랜치 기준으로 commit 가리키는 거 아님 ??  
+ 
+   
+
+$ git checkout {이동할 브랜치명} : 브랜치 이동  
+ - HEAD 포인터가 가리키는 포인터가 바뀜
+ - 각 브랜치마다 각자의 최신 commit 옆에 초록색 괄호()로 브랜치 표시됨 (해당 브랜치의 history에 지난 commit이 포함되어있다면)
+ - 각 브랜치는, 포인터가 가리키는 각자의 최신 commit까지밖에 기억못함.
+ - `<git checkout 옵션>
+   -b  : 브랜치 생성&이동 동시에`
+
+$ git branch -d {삭제할 브랜치명} : 브랜치 삭제  
+ - 해당 브랜치가 가리키는 commit까지 삭제되는 것이 아닌,
+ - 해당 브랜치의 포인터만 삭제됨  
+ - ?? 그럼 그 commit 다른데 반영안하고 그냥 삭제하면 남은 commit은 어떻게됨?? 가비지 콜렉터 등이 처리해줌? 
+
+
+#### 브랜치 병합 Merge)  
+$ git merge {합쳐질 브랜치명} : 브랜치를 병합
+ - 기준이 되는 (main)브랜치로 먼저 이동(checkout) 후 merge한다.***
+ - 그 이후 합쳐질 (issue)브랜치를 병합한다.
+
+##### Fast-forward Merge)
+ - 브랜치(포인터)의 위치만 최신 commit으로 이동시키는 방식
+ - ex) git merge
+   
+ 
+
+
+### 협업)  
+
+- Repository 에 멤버 초대  
+   - 해당 Repositories > Settings > Collaborators(Members) > E-mail 또는 id로 초대 > 권한범위 지정 > 초대전송
+- 브랜치별 권한 설정
+   - 해당 Repositories > Settings > Branches > protection rule(Protected branch) > 브랜치별 상세권한 설정
 
    
 ### Cherry-Pick)  
