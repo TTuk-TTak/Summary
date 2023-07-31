@@ -39,6 +39,8 @@ ex) SVN, CVS, Git, Mercurial, BitKeeper, ClearCase...
 - 원격 서버의 소스코드 손실해도 복구 가능
 - ex) Git, Mercurial
 
+---
+
 # Git 설치
 
 - [https://git-scm.com](https://git-scm.com/) [로컬]
@@ -122,6 +124,8 @@ or
 $ git clone {원격저장소 주소}  : 원격저장소 로컬로 다운로드 (기본 master 브랜치)  
  - 이미 존재하는 '.git' 폴더까지 다운로드 하는 것이므로, 별도의 초기화 필요치 않음
  - 
+
+---  
 
   
 
@@ -212,6 +216,7 @@ $ git pull {원격저장소 별칭} {현재로컬브랜치} : 원격 -> 로컬�
  - 가져온 commit + merge commit 까지 중복 발생 ***
  - ?? 머지 커밋 없애려면 어떻게 해야함 ??
 
+---
 
 ### git 브랜치)
 - 본래 소스코드로 부터 분기한 '독립적인' 작업 공간  
@@ -227,9 +232,10 @@ $ git branch : 현재 작업중인 브랜치 확인
    - HEAD : 현재 (로컬)브랜치를 가리키는 일종의 포인터 (마지막 commit에 대한 스냅샷)
    - ex) `HEAD -> master(브랜치) -> commit1(최신커밋)`  형태로 가리키고있음
    - 새로운 commit은 바로 이전 commit을 가리키는 형태로 linked 됨
- - `<git branch 옵션>
-   -v  : 각 브랜치가 가리키는 최신 commit 보여줌
-     - <형태>  {브랜치명} {최신 commit ID} {최신 commit 메시지} on {해당 commit이 있는 브랜치(머지된 브랜치)}`
+ - `<git branch 옵션>  
+   -v  : 각 브랜치가 가리키는 최신 commit 보여줌  
+     <형태>  
+     {브랜치명} {최신 commit ID} {최신 commit 메시지} on {해당 commit이 있는 브랜치(머지된 브랜치)}`
 
 $ git branch {생성할 브랜치명} : 새로운 브랜치 생성 (자동이동 X)  
  - 브랜치 새로 생성 = 현재기준 브랜치의 최신 commit을 가리키는 포인터를 또 새로 하나 더 만듦
@@ -250,24 +256,103 @@ $ git branch -d {삭제할 브랜치명} : 브랜치 삭제
  - ?? 그럼 그 commit 다른데 반영안하고 그냥 삭제하면 남은 commit은 어떻게됨?? 가비지 콜렉터 등이 처리해줌? 
 
 
-#### 브랜치 병합 Merge)  
+### 브랜치 병합 Merge)  
 $ git merge {합쳐질 브랜치명} : 브랜치를 병합
  - 기준이 되는 (main)브랜치로 먼저 이동(checkout) 후 merge한다.***
  - 그 이후 합쳐질 (issue)브랜치를 병합한다.
+ - 머지 커밋이 발생
+ - 로그에 Fast-forward 라고 뜸
 
 ##### Fast-forward Merge)
- - 브랜치(포인터)의 위치만 최신 commit으로 이동시키는 방식
- - ex) git merge
-   
- 
+ - (main)브랜치(포인터)의 위치만, 단순히 (합쳐질 브랜치의) 최신 commit으로 이동시키는 방식
+
+##### 3-way Merge)  
+ - 두 브랜치가 각각 서로 겹치지 않는 커밋을 2개 이상 갖고 있을 때
+ - 아래 3개의 commit을 모두 고려해 merge 진행
+    1. 두 브랜치의 공통커밋 중 가장 최신 commit  
+    2. A 브랜치의 최신 commit   
+    3. B 브랜치의 최신 commit  
+ - 새로운 merge commit이 각각 2) A의최신 커밋, 3) B의최신 커밋을 둘다 가리키는 형태로 생성됨.  
+ - 그 후 생성된 최신 merge commit을 현재 브랜치 포인터가 다시 가리키는 형태의 머지방식  
+ - ??? 그럼, 2) 3)의 commit 내용을 섞을 때 날짜기준으로 사이사이에 섞여 들어가지 않고 링크된 순서대로 A쭉- 다끝나고 B쭉- 나옴?????  
+  
+
+### 충돌 Conflict)  
+ - 변경점이 충돌하는 상태  
+ - 같은 파일 내의 같은 부분이 각각 변경점commit으로 남은 후, 이를 원격에 반영할 때 발생  
+ - 어떤 변경사항을 적용할지 수정하는것이 conflict 해결을 의미  
+ - 해결은 아래 두가지 방법으로 가능  
+  1) 직접 충돌난 파일 열어 수정 후 해결  
+     - >>>>  ======   <<<<< 등의 표현으로 각 브랜치 안의 내용 표시  (해당 기호 지워도됨)  
+  2)  $ git mergetool  
+     - `vimdiff`, 등 머지툴 사용해서 해결  
+     - 3-way 방식 반영해 위에 3개의 비교창이 뜸 (A내용 / 공통내용 / B내용)  
+     - 하단의 워킹디렉토리 창에서 직접 수정  
+  - 충돌 해결 후, add, commit 부터 다시 해야됨 (커밋메시지 자동작성됨)  
+
+---  
+### 태그 Tag)  
+- 특정 시점의 소스코드 정보를 기록하기 위함  
+- 의미있는 시점의 commit을 태깅한 것  
+- ex) rc: release candidate : 배포 예비버전  
+
+ ##### Lightweight 태그)  
+ $ git tag {태그명}  
+  - 태그명(버전명)만 남기는 태그  
+
+ ##### Annotated 태그)  
+ $ git tag -a {태그명} -m {태그메시지}  
+ $ git tag -a {태그명} `{기준시점의 커밋ID}` -m {커밋메시지}
+  - 태그명(버전명) 외 여러 정보(작성자의 이름, 이메일, 생성날짜, 태그메시지)를 함께 저장한 태그
+  - {기준시점의 커밋ID} 옵션 포함하면, 특정 시점의 commit에 태그할 수 있음 (ID는 $git log로 확인 )
 
 
+ $ git show {태그명}  
+  - {태그명} 에 저장된 정보 출력 & 확인
+  - `<옵션>
+    -ref : 전체 태그의 hash값 확인 가능  `  
+    
+
+
+---  
+
+  
 ### 협업)  
 
 - Repository 에 멤버 초대  
-   - 해당 Repositories > Settings > Collaborators(Members) > E-mail 또는 id로 초대 > 권한범위 지정 > 초대전송
-- 브랜치별 권한 설정
-   - 해당 Repositories > Settings > Branches > protection rule(Protected branch) > 브랜치별 상세권한 설정
+   - 해당 Repositories > Settings > Collaborators(Members) > E-mail 또는 id로 초대 > 권한범위 지정 > 초대전송  
+- 브랜치별 권한 설정  
+   - 해당 Repositories > Settings > Branches > protection rule(Protected branch) > 브랜치별 상세권한 설정  
+
+### 브랜치 전략)    
+  - 조직/개인마다 다른 브랜치 활용 방식  
+  - 조직에 맞게 프로세스화 하는게 중요 (일관적, 생산적)  
+  - 다음이 브랜치 기준이 될 수 있음 : feature/개발자/ 스프린트 / 사내검증 등등..  
+  - GITHUB의 브랜치 항목에서  
+      - Default branch : 메인브랜치    
+      - Active branch : 빈번히 사용하고 있는 브랜치  
+      - Stable branch : 비교적 오래되어 잘 사용되지 않는 브랜치  DB
+   
+  #### <브랜치 전략 소개>  
+  1) GitFlow : https://nvie.com/posts/a-successful-git-branching-model  
+    - 5개 브랜치 (master / develop / feature / release /hotfix)  
+    - master = 고객에게 release되는 최종 브랜치  
+    - develop = master로부터 분기, 기능 개발 브랜치  
+    - release = develop브랜치에서 분기 => `검증/ 이슈 수정` 하는 용도 (수정 후 devlop에 병합)  
+    - hotfix = master로부터 분기 (수정 후 master, develop에 모두 반영)
+       
+    * $ git-flow --help : gitflow 내용 도움말 확인 가능  
+    * $ git flow init : gitflow 방식으로 기본 브랜치(develop & master 우선 두개만) 자동생성 + (prefix 규칙 설정) + develop 브랜치로 checkout + initial commit 자동 남김  
+    * $ git flow feature start {개발할 기능명} : 'feature/{개발할기능명}' 브랜치 생성 + checkout  
+    * $ git flow feature finish {개발한 기능명} : 'feature/{개발한 기능명}' 브랜치를 develop 브랜치로 (merge + checkout) & 삭제  
+    * $ git flow release start {버전명} : 'release/{버전명}' 브랜치 생성 + checkout  
+    * $ git flow release finish {버전명} : 'release/{버전명}' 브랜치를 master 브랜치로 merge(버전명 포함, 태그 자동생성) + develop브랜치로 merge + 'release/{버전명}' 브랜치 삭제 & develop 브랜치로 checkout  
+    * $ git flow hotfix start {이슈번호} : 'hotfix/{이슈번호}' 브랜치 생성 + checkout  
+    * $ git flow hotfix finish {이슈번호} : 'hotfix/{이슈번호}' 브랜치를 master 브랜치로 merge(버전명 포함, 태그 자동생성)
+  3) ffffff
+
+
+
 
    
 ### Cherry-Pick)  
@@ -276,7 +361,4 @@ $ git merge {합쳐질 브랜치명} : 브랜치를 병합
 $ git checkout {타겟브랜치}  
 $ git cherry-pick {commit번호}  
   
-  
-### Tag
-lightweight vs annotated  
-$ git tag {tag명}
+
