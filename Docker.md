@@ -33,3 +33,26 @@ The Matrix from hell => 도커책에서 명시하는 기존의 다양한 인프�
 ------------------------------------------------------------------------------------
 가상머신과 차이 
 
+------------------------------------------------------------------------------------
+# 도커 환경세팅  
+
+  uname -a      // 현재 사용 os, hw 정보 표출  
+  cat /etc/*release    // 현재사용 os 정보 등 표출  
+  docker -v            // 도커 버전 확인  
+  docker container run {도커이미지명:버전명} {리눅스 명령어}  
+    // ex_ docker container run docker/whalesay cosway hello world!    
+      // cosway - linux에서 ASCII그림을 그려주는 명령어  
+    // ex_ docker container run centos    // 라이브러리 다운  
+      // -it 옵션 : 컨테이너 내부 접속해 바로 bash(#) 셀 실행 
+
+1. centos 이미지의 latest 버전이 로컬에 있는지 확인
+2. 없으면 공식저장소에서 다운로드 (pulling)
+3. 로컬 이미지 있다면 다운로드 하지 않고 그대로 사용
+4. 
+
+ docker container ps    // 현재 실행중인 컨테이너 목록 출력
+   // -a 옵션 : 종료된 컨테이너를 포함해 출력해줌  
+   // -d 옵션 : 백그라운드로 프로세스 실행  
+       // docker container run -d centos sleep 100  //100초 동안 백그라운드로 실행 유지  
+    // container id : 컨테이너 고유 id 가 16진수 해시값으로 생성됨
+    //
